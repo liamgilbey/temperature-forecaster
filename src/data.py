@@ -37,15 +37,18 @@ class SensorData:
         Returns:
             pl.DataFrame: The DataFrame with added time features.
         """
+        tz = os.environ.get('TZ')
+
         self.logger.info('Adding time features to the data')
         df = self.raw_data
         # Ensure the timestamp column is in datetime format
         df = df.with_columns([
             pl.col("last_changed").str.strptime(pl.Datetime).alias("timestamp")
         ])
-        # Convert the timestamp to NZT (New Zealand Time)
+        # Convert the timestamp to timezone
+        self.logger.info(f'Converting timestamp to timezone: {tz}')
         df = df.with_columns([
-            pl.col("timestamp").dt.replace_time_zone(os.environ.get('TZ'), ambiguous="earliest").alias("timestamp")
+            pl.col("timestamp").dt.replace_time_zone(tz, ambiguous="earliest").alias("timestamp")
         ])
 
         # compute the hour and the minute
@@ -62,6 +65,10 @@ class SensorData:
             (pl.col("time_frac") * 2 * np.pi).sin().alias("time_sin"),
             (pl.col("time_frac") * 2 * np.pi).cos().alias("time_cos")
         ])
+
+        # fill null values forward
+        df = df.fill_null(strategy="forward")  
+
 
         self.prepared_data = df
         return self.prepared_data.drop(["hour", "minute", "time_frac"])
