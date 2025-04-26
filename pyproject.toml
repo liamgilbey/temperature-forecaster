@@ -9,6 +9,8 @@ dependencies = [
     "python-dotenv",
     "polars>=1.27.1",
     "numpy>=2.1.2",
+    "pyarrow>=19.0.1",
+    "pandas>=2.2.3",
 ]
 
 [[tool.uv.index]]
