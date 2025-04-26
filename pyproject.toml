@@ -1,0 +1,19 @@
+[project]
+name = "temperature-forecaster"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "torch", # Remove version constraint to let uv handle it
+    "python-dotenv",
+    "polars>=1.27.1",
+]
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cpu"
+priority = 1  # Higher priority for PyTorch CPU index
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+priority = 2  # Lower priority for PyPI
