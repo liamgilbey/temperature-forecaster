@@ -8,6 +8,7 @@ dependencies = [
     "torch", # Remove version constraint to let uv handle it
     "python-dotenv",
     "polars>=1.27.1",
+    "numpy>=2.1.2",
 ]
 
 [[tool.uv.index]]
